@@ -120,6 +120,30 @@
         .tab-panel.active {
             display: block; /* 顯示選中的分頁 */
         }
+        
+        /* 新增：個人中心設定連結樣式 */
+        .setting-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem; /* p-4 */
+            background-color: white;
+            border-bottom: 1px solid #f3f4f6; /* gray-100 */
+            font-size: 1rem; /* text-base */
+            color: #1f2937; /* gray-800 */
+            font-weight: 500; /* medium */
+        }
+        .setting-link:hover {
+            background-color: #f9fafb; /* gray-50 */
+        }
+        .setting-link > i {
+            color: #9ca3af; /* gray-400 */
+        }
+        /* 移除最後一個連結的底線 */
+        .setting-link:last-child {
+            border-bottom: none;
+        }
+
 
         @keyframes pulse {
             0% {
@@ -363,61 +387,44 @@
             
             <!-- 
                 ============================================================
-                畫面 6: 個人中心 (page-garden) - 根據截圖大改版
+                畫面 6: 個人中心 (page-garden) - 根據企劃書修正
                 ============================================================
             --><div id="page-garden" class="page bg-gray-50">
-                <!-- 頂部導航 --><div class="mini-app-header w-full p-4 flex items-center shadow-sm">
-                    <!-- 移除返回按鈕 -->
-                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">個人中心</h1>
+                <!-- 頂部導航 (仿截圖) --><div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://placehold.co/40x40/c6f6d5/2f855a?text=You" alt="Your Avatar" class="w-10 h-10 rounded-full">
+                        <h1 class="text-lg font-bold text-gray-800">Hi, NCUEfreshman</h1>
+                    </div>
                 </div>
 
-                <!-- 可捲動的 wrapper --><div class="flex-grow overflow-y-auto p-6 space-y-6"> <!-- 移除 pb-16 -->
+                <!-- 可捲動的 wrapper --><div class="flex-grow overflow-y-auto"> <!-- 移除 p-6 和 space-y-6 -->
 
-                    <!-- 新：個人資料卡 (含 XP) --><div class="bg-white rounded-lg shadow-lg p-5">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://placehold.co/64x64/c6f6d5/2f855a?text=You" alt="Your Avatar" class="w-16 h-16 rounded-full border-2 border-green-200">
-                            <div>
-                                <h2 class="text-2xl font-bold text-gray-800">NCUEfreshman</h2>
-                                <p class="font-semibold text-green-600">LV 1 新手公民</p>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex justify-between text-sm font-medium text-gray-600 mb-1">
-                                <span>XP</span>
-                                <span>10 / 50</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-green-500 h-2.5 rounded-full" style="width: 20%"></div> <!-- 模擬 20% XP -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 新：四格統計版 --><div class="bg-white rounded-lg shadow-lg p-4">
-                        <div class="grid grid-cols-2 gap-4 text-center">
+                    <!-- 修正：CivicGo 四格統計版 --><div class="bg-white rounded-lg shadow-lg p-4 m-4">
+                        <div class="grid grid-cols-4 gap-2 text-center"> <!-- 4 欄 -->
                             <!-- 總積分 -->
                             <div class="p-2">
+                                <p class="text-3xl font-bold text-green-600" id="garden-total-points">0</p>
                                 <p class="text-sm text-gray-500">總積分</p>
-                                <p id="garden-total-points" class="text-3xl font-bold text-green-600">0</p>
                             </div>
-                            <!-- 已完成任務 -->
+                            <!-- 完成任務 -->
                             <div class="p-2">
-                                <p class="text-sm text-gray-500">已完成任務</p>
-                                <p id="garden-tasks-completed" class="text-3xl font-bold text-gray-800">0</p>
+                                <p class="text-3xl font-bold text-gray-800" id="garden-tasks-completed">0</p>
+                                <p class="text-sm text-gray-500">完成任務</p>
                             </div>
                             <!-- 信用積分 -->
                             <div class="p-2">
+                                <p class="text-3xl font-bold text-blue-600" id="garden-trust-score">100</p>
                                 <p class="text-sm text-gray-500">信用積分</p>
-                                <p id="garden-trust-score" class="text-3xl font-bold text-blue-600">100</p>
                             </div>
                             <!-- 已邀請 -->
                             <div class="p-2">
-                                <p class="text-sm text-gray-500">已邀請</p>
                                 <p class="text-3xl font-bold text-gray-800">0</p>
+                                <p class="text-sm text-gray-500">已邀請</p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- 保留：花園視覺化 --><div class="p-6 pt-0 flex flex-col items-center justify-center bg-green-50 rounded-2xl m-0 shadow-inner">
+                    <!-- 核心：城市花園 (加回來) --><div class="p-6 pt-0 flex flex-col items-center justify-center bg-green-50 rounded-2xl m-4 shadow-inner">
                         <p class="w-full text-center text-lg font-semibold text-gray-700 mb-4 mt-6">NCUEfreshman的花園</p>
                         <div class="w-full h-64 rounded-lg flex items-end justify-center space-x-4 overflow-hidden relative p-4 garden-bg-gradient">
                             
@@ -430,37 +437,35 @@
                                 <!-- 花朵會被 JS 加到這裡 --></div>
                         </div>
                     </div>
-
-                    <!-- 新增：我的戰績 (仿截圖) --><div class="bg-white rounded-lg shadow-lg p-5">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">我的戰績</h3>
-                        <div class="space-y-4">
-                            <!-- 本月戰績 -->
-                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-semibold text-red-600 bg-red-100 px-3 py-1 rounded-full">本月</span>
-                                <p class="text-gray-700">已完成 <span class="font-bold text-lg text-gray-900">0</span> 項任務</p>
-                            </div>
-                            <!-- 本年戰績 -->
-                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">本年</span>
-                                <p class="text-gray-700">已完成 <span class="font-bold text-lg text-gray-900">0</span> 項任務</p>
-                            </div>
-                        </div>
+                    
+                    <!-- 修正：設定連結列表 -->
+                    <div class="bg-white rounded-lg shadow-lg m-4 overflow-hidden">
+                        <button onclick="goToPage('page-impact')" class="setting-link w-full text-left">
+                            <span>我的影響力</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToPage('page-partners')" class="setting-link w-full text-left">
+                            <span>合作 NPO 與社區</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToPage('page-csr')" class="setting-link w-full text-left">
+                            <span>參與企業社會責任</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToPage('page-contact')" class="setting-link w-full text-left">
+                            <span>聯絡我們</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToPage('page-about')" class="setting-link w-full text-left">
+                            <span>關於 CivicGo App</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToPage('page-splash')" class="setting-link w-full text-left text-red-600">
+                            <span>登出</span>
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </button>
                     </div>
 
-                    <!-- 新增：邀請夥伴 (仿截圖) --><div class="bg-white rounded-lg shadow-lg p-5">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-lg font-semibold text-gray-800">邀請夥伴</h3>
-                            <img src="https://placehold.co/80x40/f0f9ff/0284c7?text=Invite" alt="邀請示意圖" class="rounded">
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">邀請好友加入，你們都能獲得積分獎勵！</p>
-                        <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
-                            <span class="text-gray-700 font-medium">我的邀請碼: <span class="font-bold text-lg text-black tracking-wider ml-2">B9F53A</span></span>
-                            <button onclick="showSimpleAlert('已複製邀請碼 B9F53A')" class="p-2 text-gray-600 hover:text-green-600">
-                                <i class="fa-solid fa-copy fa-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                
                 </div> <!-- 結束可捲動的 wrapper -->
                 
                 <!-- 底部導航 (全新 5 項目結構) --><div class="bottom-nav w-full bg-white flex justify-around items-center border-t border-gray-200 shadow-inner-top"> <!-- 移除 fixed 和 style -->
@@ -901,6 +906,195 @@
                 </div>
             </div>
 
+            <!-- 
+                ============================================================
+                修正：個人 > 我的影響力 (page-impact)
+                ============================================================
+            --><div id="page-impact" class="page bg-gray-50">
+                <div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <button onclick="goToPage('page-garden')" class="p-2 text-gray-600">
+                        <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">我的影響力</h1>
+                    <span class="w-10 h-10"></span> <!-- 佔位符 -->
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 space-y-6">
+                    <!-- 總共完成任務 -->
+                    <div class="bg-white rounded-lg shadow-lg p-5 text-center">
+                        <img src="https://placehold.co/100x80/dbeafe/1e3a8a?text=Task" class="mx-auto mb-3">
+                        <p class="text-gray-600">我總共完成</p>
+                        <p class="text-4xl font-bold text-blue-600 my-1"><span id="impact-tasks-completed">0</span> <span class="text-lg font-medium">項</span></p>
+                        <p class="text-gray-800 font-semibold">任務</p>
+                        <p class="text-sm text-gray-500 mt-3 bg-gray-100 p-2 rounded">我們已一起為社區完成 10,000 項任務</p>
+                    </div>
+                    <!-- 總共服務時數 -->
+                    <div class="bg-white rounded-lg shadow-lg p-5 text-center">
+                        <img src="https://placehold.co/100x80/d1fae5/047857?text=Hours" class="mx-auto mb-3">
+                        <p class="text-gray-600">我總共貢獻</p>
+                        <p class="text-4xl font-bold text-green-600 my-1"><span id="impact-total-hours">0</span> <span class="text-lg font-medium">小時</span></p>
+                        <p class="text-gray-800 font-semibold">社區服務</p>
+                        <p class="text-sm text-gray-500 mt-3 bg-gray-100 p-2 rounded">至今我們已一起貢獻 5,000 小時</p>
+                    </div>
+                    <!-- 總共募集資源 -->
+                    <div class="bg-white rounded-lg shadow-lg p-5 text-center">
+                        <img src="https://placehold.co/100x80/e0e7ff/4338ca?text=Items" class="mx-auto mb-3">
+                        <p class="text-gray-600">我總共募集</p>
+                        <p class="text-4xl font-bold text-gray-600 my-1"><span id="impact-total-items">0</span> <span class="text-lg font-medium">件</span></p>
+                        <p class="text-gray-800 font-semibold">資源 (書籍/冬衣)</p>
+                        <p class="text-sm text-gray-500 mt-3 bg-gray-100 p-2 rounded">至今我們已一起募集 1,200 件資源</g>
+                    </div>
+                    <!-- 總共邀請 -->
+                    <div class="bg-white rounded-lg shadow-lg p-5 text-center">
+                        <img src="https://placehold.co/100x80/f0f9ff/0284c7?text=Invite" class="mx-auto mb-3">
+                        <p class="text-gray-600">總共邀請</p>
+                        <p class="text-4xl font-bold text-cyan-600 my-1">0 <span class="text-lg font-medium">位</span></p>
+                        <p class="text-gray-800 font-semibold">夥伴</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+                ============================================================
+                修正：個人 > 合作 NPO (page-partners)
+                ============================================================
+            --><div id="page-partners" class="page bg-gray-50"> <!-- 修正 ID -->
+                <div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <button onclick="goToPage('page-garden')" class="p-2 text-gray-600">
+                        <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">合作 NPO 與社區</h1> <!-- 修正標題 -->
+                    <span class="w-10 h-10"></span> <!-- 佔位符 -->
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 space-y-4">
+                    <p class="text-center text-gray-700">感謝所有在地夥伴，共同為社區努力。</p> <!-- 修正內文 -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- 9 個 Logo 範例 -->
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=NPO+1" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=社區+A" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=NPO+2" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=NPO+3" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=基金會" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=社區+B" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=NPO+4" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=NPO+5" alt="Logo"></div>
+                        <div class="bg-white rounded-lg shadow p-4 flex items-center justify-center aspect-square"><img src="https://placehold.co/100x40/cccccc/999999?text=社區+C" alt="Logo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+                ============================================================
+                新增：個人 > 參與 CSR (page-csr)
+                ============================================================
+            --><div id="page-csr" class="page bg-gray-50">
+                <div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <button onclick="goToPage('page-garden')" class="p-2 text-gray-600">
+                        <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">參與企業社會責任</h1>
+                    <span class="w-10 h-10"></span> <!-- 佔位符 -->
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 space-y-6">
+                    <p class="text-gray-700">帶著員工一起參與企業社會責任... 歡迎<a href="#" class="text-blue-600">了解我們的服務</a>。</p>
+                    <form onsubmit="event.preventDefault(); showSimpleAlert('資料已送出 (模擬)');">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="csr-company-id" class="text-sm font-medium text-gray-700">企業統一編號：</label>
+                                <input type="text" id="csr-company-id" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="">
+                            </div>
+                            <div>
+                                <label for="csr-employee-id" class="text-sm font-medium text-gray-700">員工編號：</label>
+                                <input type="text" id="csr-employee-id" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="">
+                            </div>
+                            <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
+                                <span class="text-gray-700 font-medium">我的邀請碼: <span class="font-bold text-lg text-black tracking-wider ml-2">B9F53A</span></span>
+                                <button type="button" onclick="showSimpleAlert('已複製邀請碼 B9F53A')" class="p-2 text-gray-600 hover:text-green-600">
+                                    <i class="fa-solid fa-copy fa-lg"></i>
+                                </button>
+                            </div>
+                            <button type="button" onclick="showSimpleAlert('分享邀請連結 (模擬)')" class="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
+                                分享邀請連結
+                            </button>
+                            <button type="submit" class="w-full bg-white border border-gray-300 text-gray-700 font-semibold py-3 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                                編輯
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 
+                ============================================================
+                新增：個人 > 聯絡我們 (page-contact)
+                ============================================================
+            --><div id="page-contact" class="page bg-gray-50">
+                <div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <button onclick="goToPage('page-garden')" class="p-2 text-gray-600">
+                        <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">聯絡我們</h1>
+                    <span class="w-10 h-10"></span> <!-- 佔位符 -->
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 space-y-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800">常見問題說明</h3>
+                        <p class="text-gray-700 mt-1">如需要其他協助，請留下您的訊息與建議，我們將盡快以 Email 回覆您。謝謝！</p>
+                    </div>
+                    <form onsubmit="event.preventDefault(); showSimpleAlert('訊息已發送 (模擬)');">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="contact-email" class="text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="contact-email" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="">
+                            </div>
+                            <div>
+                                <label for="contact-subject" class="text-sm font-medium text-gray-700">主旨</label>
+                                <input type="text" id="contact-subject" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="">
+                            </div>
+                            <div>
+                                <label for="contact-content" class="text-sm font-medium text-gray-700">內容</label>
+                                <textarea id="contact-content" rows="6" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder=""></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
+                                發送
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 
+                ============================================================
+                修正：個人 > 關於 (page-about)
+                ============================================================
+            --><div id="page-about" class="page bg-gray-50">
+                <div class="mini-app-header w-full p-4 flex items-center shadow-sm">
+                    <button onclick="goToPage('page-garden')" class="p-2 text-gray-600">
+                        <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow">關於 CivicGo App</h1>
+                    <span class="w-10 h-10"></span> <!-- 佔位符 -->
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 space-y-6 text-center">
+                    <!-- 修正 Logo -->
+                    <img src="https://placehold.co/100x100/fef08a/854d0e?text=CivicGo" class="mx-auto rounded-lg">
+                    <h2 class="text-2xl font-bold text-gray-800">CivicGo</h2>
+                    <p class="text-lg text-gray-600">讓改變，從巷口開始</p>
+                    <!-- 修正內文 -->
+                    <p class="text-gray-700 text-left">CivicGo 是一個建立於 LINE 生態系，專為 Z 世代設計的遊戲化微型公民參與平台。</p>
+                    <p class="text-gray-700 text-left">我們將宏大的社會關懷「微粒化」為 10 分鐘可完成的在地任務，透過「城市花園」的可視化成就系統，將抽象的貢獻轉化為具體的幸福感與持續行動的內在動力。</p>
+                    
+                    <div>
+                        <p class="font-semibold">相關影片：<a href="#" class="text-blue-600">https://youtu.be/...</a></p>
+                        <p class="font-semibold">加入我們：<a href="#" class="text-blue-600">https://www.surveycake.com/...</a></p>
+                    </div>
+
+                    <button type="button" onclick="showSimpleAlert('隱私權條款 (模擬)')" class="w-full bg-white border border-gray-300 text-gray-700 font-semibold py-3 rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                        隱私權條款
+                    </button>
+                </div>
+            </div>
+
+
             <!-- 自定義提示框 --><div id="custom-alert" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-8 w-11/12 text-center" style="display: none; z-index: 999;">
                 <p id="custom-alert-message" class="text-gray-700 text-lg">訊息</p>
                 <button onclick="closeSimpleAlert()" class="mt-6 w-full bg-green-500 text-white font-semibold py-2 rounded-lg">
@@ -976,6 +1170,10 @@
                     if (pageId === 'page-map') {
                         updateTaskPinsStatus(); // 每次到地圖頁都更新圖釘
                     }
+                    // 新增：更新影響力頁面
+                    if (pageId === 'page-impact') {
+                        updateImpactStats();
+                    }
                 } else {
                     page.classList.remove('active');
                 }
@@ -1046,6 +1244,18 @@
         // --- 新增：更新獎勵頁狀態 ---
         function updateRewardsStats() {
             document.getElementById('rewards-current-points').innerText = currentPoints;
+        }
+        
+        // --- 新增：更新我的影響力頁面狀態 ---
+        function updateImpactStats() {
+            document.getElementById('impact-tasks-completed').innerText = tasksCompleted;
+            // 模擬服務時數 (假設 1 任務 = 0.25 小時)
+            document.getElementById('impact-total-hours').innerText = (tasksCompleted * 0.25).toFixed(1);
+            // 模擬募集資源
+            let items = 0;
+            if(taskDatabase['task2'].completed) items += 1; // 假設捐 1 本書
+            if(taskDatabase['task3'].completed) items += 1; // 假設捐 1 件衣服
+            document.getElementById('impact-total-items').innerText = items;
         }
 
         // 新增：更新地圖上所有圖釘的狀態
@@ -1158,7 +1368,7 @@
             currentPoints += task.reward;
             tasksCompleted += 1;
             trustScore += 5; 
-            flowersInGarden.push(getRandomFlower()); 
+            flowersInGarden.push(getRandomFlower()); // 城市花園功能
             task.completed = true; // 標記任務為已完成
 
             // 從 acceptedTasks 陣列中移除
@@ -1187,38 +1397,29 @@
             // 更新新版排行榜上的積分
             document.getElementById('ranking-your-points-clone').innerText = currentPoints;
             
-            // 更新戰績
-            // 這裡只是模擬，所以我們只更新「本年」
-            const annualTasksEl = document.querySelector('#page-garden span.font-bold.text-lg.text-gray-900');
-            if(annualTasksEl) {
-                // 簡易更新，假設所有任務都是今年的
-                document.querySelectorAll('#page-garden span.font-bold.text-lg.text-gray-900')[0].innerText = tasksCompleted;
-                document.querySelectorAll('#page-garden span.font-bold.text-lg.text-gray-900')[1].innerText = tasksCompleted;
-            }
-
-
+            // 城市花園視覺化 (加回來)
             const container = document.getElementById('flower-container');
-            container.innerHTML = ''; // 清空，重新繪製
+            if(container) {
+                container.innerHTML = ''; // 清空，重新繪製
+                flowersInGarden.forEach((flowerSVG, index) => {
+                    const flowerEl = document.createElement('div');
+                    flowerEl.className = 'flower absolute'; // 使用 absolute 定位
+                    const leftPosition = 15 + (index % 6) * 14; // 隨機分散在寬度內
+                    const bottomPosition = 20 + (index % 3) * 15; // 高度也隨機調整 (從 20px ~ 50px)
+                    flowerEl.style.cssText = `
+                        left: ${leftPosition}%; 
+                        bottom: ${bottomPosition}px; 
+                        transform: translateX(-50%) scale(0.5);
+                    `;
+                    flowerEl.innerHTML = flowerSVG;
+                    container.appendChild(flowerEl);
 
-            // 調整花朵位置，讓它們在城市天際線之上
-            flowersInGarden.forEach((flowerSVG, index) => {
-                const flowerEl = document.createElement('div');
-                flowerEl.className = 'flower absolute'; // 使用 absolute 定位
-                const leftPosition = 15 + (index % 6) * 14; // 隨機分散在寬度內
-                const bottomPosition = 20 + (index % 3) * 15; // 高度也隨機調整 (從 20px ~ 50px)
-                flowerEl.style.cssText = `
-                    left: ${leftPosition}%; 
-                    bottom: ${bottomPosition}px; 
-                    transform: translateX(-50%) scale(0.5);
-                `;
-                flowerEl.innerHTML = flowerSVG;
-                container.appendChild(flowerEl);
-
-                setTimeout(() => {
-                    flowerEl.classList.add('visible');
-                    flowerEl.style.transform = `translateX(-50%) scale(1)`; // 讓花朵長大
-                }, 100 * index);
-            });
+                    setTimeout(() => {
+                        flowerEl.classList.add('visible');
+                        flowerEl.style.transform = `translateX(-50%) scale(1)`; // 讓花朵長大
+                    }, 100 * index);
+                });
+            }
         }
         
         // --- 獎勵兌換互動功能 ---
@@ -1268,6 +1469,7 @@
             setTimeout(resetManualForm, 500); // 關閉時重設表單
         }
 
+        // 城市花園功能 (加回來)
         function getRandomFlower() {
             const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6']; 
             const color = colors[Math.floor(Math.random() * colors.length)];
