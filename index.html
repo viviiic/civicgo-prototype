@@ -567,7 +567,7 @@
 
             <!-- 
                 ============================================================
-                新增畫面 8: 社群 (動態 + 排行榜)
+                新增畫面 8: 社群 (動態 + 排行榜) - 新增互動
                 ============================================================
             --><div id="page-community-feed" class="page bg-gray-50">
                 <!-- 【修改】頂部導航 (標題 + 膠囊按鈕) --><div class="mini-app-header w-full p-4 flex flex-col shadow-sm">
@@ -587,40 +587,85 @@
                 <div class="flex-grow overflow-y-auto"> <!-- 移除 pb-16 -->
                     <!-- 分頁 1: 動態 (新功能) -->
                     <div id="tab-panel-feed" class="tab-panel active p-4 space-y-4">
-                        <!-- 範例貼文 1 -->
+                        
+                        <!-- 新增：發布動態 -->
                         <div class="bg-white rounded-lg shadow p-4">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <img src="https://placehold.co/40x40/fecdd3/881337?text=C" alt="Avatar" class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="font-semibold text-gray-800">CivicLover123</p>
-                                    <p class="text-xs text-gray-500">2 小時前</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-700 mb-3">今天去進德路幫忙撿垃圾了！雖然很熱，但看到街道變乾淨就好開心！🥳 #CivicGo #社區服務</p>
-                            <img src="https://placehold.co/400x250/c6f6d5/2f855a?text=Cleaned+Street" alt="貼文圖片" class="w-full rounded-lg object-cover">
+                            <textarea id="new-post-content" class="w-full p-2 border border-gray-200 rounded-lg text-sm" rows="3" placeholder="分享您今天做了什麼..."></textarea>
+                            <button onclick="addNewPost()" class="w-full mt-2 bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                發布動態
+                            </button>
                         </div>
-                        <!-- 範例貼文 2 -->
-                        <div class="bg-white rounded-lg shadow p-4">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <img src="https://placehold.co/40x40/dbeafe/1e40af?text=G" alt="Avatar" class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="font-semibold text-gray-800">GreenGuardian8</p>
-                                    <p class="text-xs text-gray-500">5 小時前</p>
+
+                        <!-- 動態牆容器 -->
+                        <div id="feed-post-container" class="space-y-4">
+                            <!-- 範例貼文 1 -->
+                            <div class="bg-white rounded-lg shadow p-4">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <img src="https://placehold.co/40x40/fecdd3/881337?text=C" alt="Avatar" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">CivicLover123</p>
+                                        <p class="text-xs text-gray-500">2 小時前</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-3">今天去進德路幫忙撿垃圾了！雖然很熱，但看到街道變乾淨就好開心！🥳 #CivicGo #社區服務</p>
+                                <img src="https://placehold.co/400x250/c6f6d5/2f855a?text=Cleaned+Street" alt="貼文圖片" class="w-full rounded-lg object-cover">
+                                <!-- 新增：互動按鈕 -->
+                                <div class="flex items-center space-x-4 mt-3 pt-3 border-t border-gray-100">
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-red-500" onclick="toggleLike(this)">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span class="text-sm font-medium">12</span>
+                                    </button>
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-blue-500" onclick="showSimpleAlert('留言功能開發中！')">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span class="text-sm font-medium">3</span>
+                                    </button>
                                 </div>
                             </div>
-                            <p class="text-gray-700">把家裡用不到的二手書捐給圖書館了，希望能幫到需要的人～</p>
-                        </div>
-                         <!-- 範例貼文 3 -->
-                        <div class="bg-white rounded-lg shadow p-4">
-                            <div class="flex items-center space-x-3 mb-3">
-                                <img src="https://placehold.co/50x50/e0e7ff/4338ca?text=U" alt="Avatar" class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="font-semibold text-gray-800">UrbanExplorer22</p>
-                                    <p class="text-xs text-gray-500">1 天前</p>
+                            <!-- 範例貼文 2 -->
+                            <div class="bg-white rounded-lg shadow p-4">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <img src="https://placehold.co/40x40/dbeafe/1e40af?text=G" alt="Avatar" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">GreenGuardian8</p>
+                                        <p class="text-xs text-gray-500">5 小時前</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700">把家裡用不到的二手書捐給圖書館了，希望能幫到需要的人～</p>
+                                <!-- 新增：互動按鈕 -->
+                                <div class="flex items-center space-x-4 mt-3 pt-3 border-t border-gray-100">
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-red-500" onclick="toggleLike(this)">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span class="text-sm font-medium">8</span>
+                                    </button>
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-blue-500" onclick="showSimpleAlert('留言功能開發中！')">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span class="text-sm font-medium">1</span>
+                                    </button>
                                 </div>
                             </div>
-                            <p class="text-gray-700 mb-3">募集的冬衣送達 NPO 囉！感謝大家的愛心 ❤️</p>
-                            <img src="https://placehold.co/400x250/e0e7ff/4338ca?text=Donation+Box" alt="貼文圖片" class="w-full rounded-lg object-cover">
+                            <!-- 範例貼文 3 -->
+                            <div class="bg-white rounded-lg shadow p-4">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <img src="https://placehold.co/50x50/e0e7ff/4338ca?text=U" alt="Avatar" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">UrbanExplorer22</p>
+                                        <p class="text-xs text-gray-500">1 天前</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-3">募集的冬衣送達 NPO 囉！感謝大家的愛心 ❤️</p>
+                                <img src="https://placehold.co/400x250/e0e7ff/4338ca?text=Donation+Box" alt="貼文圖片" class="w-full rounded-lg object-cover">
+                                <!-- 新增：互動按鈕 -->
+                                <div class="flex items-center space-x-4 mt-3 pt-3 border-t border-gray-100">
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-red-500" onclick="toggleLike(this)">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span class="text-sm font-medium">25</span>
+                                    </button>
+                                    <button class="flex items-center space-x-1 text-gray-600 hover:text-blue-500" onclick="showSimpleAlert('留言功能開發中！')">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span class="text-sm font-medium">5</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1232,6 +1277,73 @@
             if (tabName === 'ranking') {
                 document.getElementById('ranking-your-points-clone').innerText = currentPoints;
             }
+        }
+        
+        // --- 新增：社群動態互動 ---
+        
+        // 1. 發布新動態
+        function addNewPost() {
+            const contentEl = document.getElementById('new-post-content');
+            const content = contentEl.value;
+            if (!content.trim()) {
+                showSimpleAlert("請輸入動態內容！");
+                return;
+            }
+            
+            const postContainer = document.getElementById('feed-post-container');
+            const newPost = document.createElement('div');
+            newPost.className = 'bg-white rounded-lg shadow p-4';
+            
+            // 淨化用戶輸入 (簡易版)
+            const sanitizedContent = content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            
+            newPost.innerHTML = `
+                <div class="flex items-center space-x-3 mb-3">
+                    <img src="https://placehold.co/40x40/c6f6d5/2f855a?text=You" alt="Avatar" class="w-10 h-10 rounded-full">
+                    <div>
+                        <p class="font-semibold text-gray-800">NCUEfreshman</p>
+                        <p class="text-xs text-gray-500">剛剛</p>
+                    </div>
+                </div>
+                <p class="text-gray-700">${sanitizedContent}</p>
+                <!-- 新增：互動按鈕 -->
+                <div class="flex items-center space-x-4 mt-3 pt-3 border-t border-gray-100">
+                    <button class="flex items-center space-x-1 text-gray-600 hover:text-red-500" onclick="toggleLike(this)">
+                        <i class="fa-regular fa-heart"></i>
+                        <span class="text-sm font-medium">0</span>
+                    </button>
+                    <button class="flex items-center space-x-1 text-gray-600 hover:text-blue-500" onclick="showSimpleAlert('留言功能開發中！')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span class="text-sm font-medium">0</span>
+                    </button>
+                </div>
+            `;
+            
+            // 將新貼文加到最上方
+            postContainer.prepend(newPost);
+            
+            // 清空輸入框
+            contentEl.value = '';
+        }
+
+        // 2. 按愛心
+        function toggleLike(buttonEl) {
+            const icon = buttonEl.querySelector('i');
+            const countSpan = buttonEl.querySelector('span');
+            let count = parseInt(countSpan.innerText);
+            
+            if (icon.classList.contains('fa-regular')) {
+                // 按讚
+                icon.classList.remove('fa-regular', 'text-gray-600');
+                icon.classList.add('fa-solid', 'text-red-500');
+                count++;
+            } else {
+                // 取消讚
+                icon.classList.remove('fa-solid', 'text-red-500');
+                icon.classList.add('fa-regular', 'text-gray-600');
+                count--;
+            }
+            countSpan.innerText = count;
         }
 
         // --- 核心流程 ---
