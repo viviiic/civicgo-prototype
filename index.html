@@ -144,6 +144,14 @@
             border-bottom: none;
         }
 
+        /* 新增：地圖拖移游標 */
+        #map-viewport {
+            cursor: grab;
+            background-color: #F5F3EF; /* 修正：地圖底色 */
+        }
+        #map-viewport.grabbing {
+            cursor: grabbing;
+        }
 
         @keyframes pulse {
             0% {
@@ -237,53 +245,57 @@
                     <span class="w-10 h-10"></span> <!-- 佔位符保持標題置中 -->
                 </div>
                 
-                <!-- 地圖區域 - 使用 SVG 示意圖 --><div class="flex-grow relative w-full overflow-hidden bg-gray-200">
-                    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
-                        <!-- 基礎底色 (淺米色) --><rect x="0" y="0" width="400" height="600" fill="#F5F3EF" />
-                        
-                        <!-- 道路 (中灰色) --><rect x="150" y="0" width="60" height="600" fill="#CBD5E1" /> <!-- 垂直主要道路 --><rect x="0" y="250" width="400" height="60" fill="#CBD5E1" /> <!-- 水平主要道路 --><rect x="0" y="450" width="400" height="40" fill="#E2E8F0" /> <!-- 水平小路 --><rect x="300" y="0" width="40" height="250" fill="#E2E8F0" /> <!-- 垂直小路 --><!-- 道路中心線 --><path d="M 170 0 V 600" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
-                        <path d="M 190 0 V 600" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
-                        <path d="M 0 270 H 400" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
-                        <path d="M 0 290 H 400" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
+                <!-- 地圖區域 - 修改：新增 map-viewport 和 map-container -->
+                <div id="map-viewport" class="flex-grow relative w-full overflow-hidden"> <!-- 移除 bg-gray-200, 新增 id -->
+                    <div id="map-container" class="w-full h-full relative" style="transform-origin: 0 0;"> <!-- 新增 id -->
+                        <!-- SVG 地圖背景 -->
+                        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
+                            <!-- 基礎底色 (淺米色) --><rect x="0" y="0" width="400" height="600" fill="#F5F3EF" />
+                            
+                            <!-- 道路 (中灰色) --><rect x="150" y="0" width="60" height="600" fill="#CBD5E1" /> <!-- 垂直主要道路 --><rect x="0" y="250" width="400" height="60" fill="#CBD5E1" /> <!-- 水平主要道路 --><rect x="0" y="450" width="400" height="40" fill="#E2E8F0" /> <!-- 水平小路 --><rect x="300" y="0" width="40" height="250" fill="#E2E8F0" /> <!-- 垂直小路 --><!-- 道路中心線 --><path d="M 170 0 V 600" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
+                            <path d="M 190 0 V 600" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
+                            <path d="M 0 270 H 400" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
+                            <path d="M 0 290 H 400" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" fill="none"/>
 
-                        <!-- 綠地 (公園) --><rect x="230" y="330" width="150" height="100" fill="#C6F6D5" /> <!-- 右下公園 --><rect x="20" y="20" width="110" height="210" fill="#D1FAE5" /> <!-- 左上公園 --><!-- 建築物 (深灰 & 不同色調) --><rect x="230" y="20" width="50" height="80" fill="#9CA3AF" />
-                        <rect x="230" y="120" width="50" height="110" fill="#A0AEC0" />
-                        
-                        <rect x="360" y="20" width="20" height="210" fill="#A0AEC0" />
+                            <!-- 綠地 (公園) --><rect x="230" y="330" width="150" height="100" fill="#C6F6D5" /> <!-- 右下公園 --><rect x="20" y="20" width="110" height="210" fill="#D1FAE5" /> <!-- 左上公園 --><!-- 建築物 (深灰 & 不同色調) --><rect x="230" y="20" width="50" height="80" fill="#9CA3AF" />
+                            <rect x="230" y="120" width="50" height="110" fill="#A0AEC0" />
+                            
+                            <rect x="360" y="20" width="20" height="210" fill="#A0AEC0" />
 
-                        <rect x="20" y="330" width="110" height="100" fill="#9CA3AF" />
-                        <rect x="20" y="510" width="110" height="70" fill="#A0AEC0" />
-                        <rect x="230" y="510" width="150" height="70" fill="#9CA3AF" />
+                            <rect x="20" y="330" width="110" height="100" fill="#9CA3AF" />
+                            <rect x="20" y="510" width="110" height="70" fill="#A0AEC0" />
+                            <rect x="230" y="510" width="150" height="70" fill="#9CA3AF" />
+                            
+                            <!-- 公園裡的樹 (圓形) --><circle cx="50" cy="50" r="10" fill="#4ADE80" opacity="0.8"/>
+                            <circle cx="80" cy="80" r="15" fill="#34D399" opacity="0.8"/>
+                            <circle cx="100" cy="150" r="12" fill="#4ADE80" opacity="0.8"/>
+                            <circle cx="40" cy="200" r="10" fill="#34D399" opacity="0.8"/>
+                            <circle cx="250" cy="360" r="10" fill="#4ADE80" opacity="0.8"/>
+                            <circle cx="280" cy="400" r="15" fill="#34D399" opacity="0.8"/>
+                            <circle cx="340" cy="380" r="12" fill="#4ADE80" opacity="0.8"/>
+                        </svg>
                         
-                        <!-- 公園裡的樹 (圓形) --><circle cx="50" cy="50" r="10" fill="#4ADE80" opacity="0.8"/>
-                        <circle cx="80" cy="80" r="15" fill="#34D399" opacity="0.8"/>
-                        <circle cx="100" cy="150" r="12" fill="#4ADE80" opacity="0.8"/>
-                        <circle cx="40" cy="200" r="10" fill="#34D399" opacity="0.8"/>
-                        <circle cx="250" cy="360" r="10" fill="#4ADE80" opacity="0.8"/>
-                        <circle cx="280" cy="400" r="15" fill="#34D399" opacity="0.8"/>
-                        <circle cx="340" cy="380" r="12" fill="#4ADE80" opacity="0.8"/>
-                    </svg>
+                        <!-- 使用者當前位置 --><div class="absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
+                            <div class="w-4 h-4 bg-blue-500 rounded-full absolute top-0 left-0 animate-ping"></div>
+                        </div>
+
+                        <!-- 任務圖釘 1: 撿垃圾 --><div id="pin-task1" class="task-pin border-red-500" style="top: 45%; left: 40%;" onclick="showTaskDetail('task1')">
+                            <i class="fa-solid fa-trash-can fa-lg text-red-700"></i>
+                            <span class="task-label">任務執行中</span>
+                        </div>
+
+                        <!-- 任務圖釘 2: 捐二手書 --><div id="pin-task2" class="task-pin border-blue-500" style="top: 60%; left: 65%;" onclick="showTaskDetail('task2')">
+                            <i class="fa-solid fa-book fa-lg text-blue-700"></i>
+                            <span class="task-label">任務執行中</span>
+                        </div>
+
+                        <!-- 任務圖釘 3: 募集冬衣 --><div id="pin-task3" class="task-pin border-yellow-500" style="top: 25%; left: 55%;" onclick="showTaskDetail('task3')">
+                            <i class="fa-solid fa-shirt fa-lg text-yellow-700"></i>
+                            <span class="task-label">任務執行中</span>
+                        </div>
+                    </div>
                     
-                    <!-- 使用者當前位置 --><div class="absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                        <div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
-                        <div class="w-4 h-4 bg-blue-500 rounded-full absolute top-0 left-0 animate-ping"></div>
-                    </div>
-
-                    <!-- 任務圖釘 1: 撿垃圾 --><div id="pin-task1" class="task-pin border-red-500" style="top: 45%; left: 40%;" onclick="showTaskDetail('task1')">
-                        <i class="fa-solid fa-trash-can fa-lg text-red-700"></i>
-                        <span class="task-label">任務執行中</span>
-                    </div>
-
-                    <!-- 任務圖釘 2: 捐二手書 --><div id="pin-task2" class="task-pin border-blue-500" style="top: 60%; left: 65%;" onclick="showTaskDetail('task2')">
-                        <i class="fa-solid fa-book fa-lg text-blue-700"></i>
-                        <span class="task-label">任務執行中</span>
-                    </div>
-
-                    <!-- 任務圖釘 3: 募集冬衣 --><div id="pin-task3" class="task-pin border-yellow-500" style="top: 25%; left: 55%;" onclick="showTaskDetail('task3')">
-                        <i class="fa-solid fa-shirt fa-lg text-yellow-700"></i>
-                        <span class="task-label">任務執行中</span>
-                    </div>
-
                     <!-- 新增：發布需求 (FAB) --><button onclick="goToPage('page-community-post')" class="absolute bottom-6 right-6 w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg z-20">
                         <i class="fa-solid fa-plus fa-2x"></i>
                     </button>
@@ -910,13 +922,25 @@
                     <div class="bg-white p-6 shadow-inner-top rounded-lg"> 
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">積分兌換</h3>
                         <div class="space-y-4">
+                            <!-- LINE POINTS (排版修正) -->
                             <button id="redeem-line-btn-clone" onclick="redeemLinePoints(500)" class="w-full bg-[#06C755] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-between shadow transition-opacity duration-200 enabled:hover:opacity-80">
-                                <span><i class="fa-brands fa-line fa-lg mr-2"></i>兌換 50 點 LINE POINTS</span>
+                                <span class="inline-flex items-center whitespace-nowrap"><i class="fa-brands fa-line fa-lg mr-2"></i>兌換 50 點 LINE POINTS</span>
                                 <span class="bg-white text-green-600 text-sm font-bold px-2 py-1 rounded">500 積分</span>
                             </button>
+                            <!-- 在地商家 (排版修正) -->
                             <button id="redeem-coffee-btn-clone" onclick="redeemCoffeeVoucher(300)" class="w-full bg-yellow-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-between shadow transition-opacity duration-200 enabled:hover:opacity-80">
-                                <span><i class="fa-solid fa-store mr-2"></i>兌換 在地商家咖啡券</span>
+                                <span class="inline-flex items-center whitespace-nowrap"><i class="fa-solid fa-store mr-2"></i>兌換 在地商家咖啡券</span>
                                 <span class="bg-white text-yellow-800 text-sm font-bold px-2 py-1 rounded">300 積分</span>
+                            </button>
+                            <!-- NPO 周邊 (排版修正) -->
+                            <button id="redeem-npo-bag-btn" onclick="redeemNPOBag(400)" class="w-full bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-between shadow transition-opacity duration-200 enabled:hover:opacity-80">
+                                <span class="inline-flex items-center whitespace-nowrap"><i class="fa-solid fa-bag-shopping mr-2"></i>兌換 NPO 紀念帆布袋</span>
+                                <span class="bg-white text-blue-800 text-sm font-bold px-2 py-1 rounded">400 積分</span>
+                            </button>
+                            <!-- 小作所商品 (排版修正) -->
+                            <button id="redeem-soap-btn" onclick="redeemSoap(250)" class="w-full bg-purple-500 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-between shadow transition-opacity duration-200 enabled:hover:opacity-80">
+                                <span class="inline-flex items-center whitespace-nowrap"><i class="fa-solid fa-soap mr-2"></i>兌換 小作所手工皂</span>
+                                <span class="bg-white text-purple-800 text-sm font-bold px-2 py-1 rounded">250 積分</span>
                             </button>
                         </div>
                     </div>
@@ -966,7 +990,10 @@
                 <div class="flex-grow overflow-y-auto p-6 space-y-6">
                     <!-- 總共完成任務 -->
                     <div class="bg-white rounded-lg shadow-lg p-5 text-center">
-                        <img src="https://placehold.co/100x80/dbeafe/1e3a8a?text=Task" class="mx-auto mb-3">
+                        <!-- 修正：替換為 Icon -->
+                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="fa-solid fa-list-check fa-3x text-blue-600"></i>
+                        </div>
                         <p class="text-gray-600">我總共完成</p>
                         <p class="text-4xl font-bold text-blue-600 my-1"><span id="impact-tasks-completed">0</span> <span class="text-lg font-medium">項</span></p>
                         <p class="text-gray-800 font-semibold">任務</p>
@@ -974,7 +1001,10 @@
                     </div>
                     <!-- 總共服務時數 -->
                     <div class="bg-white rounded-lg shadow-lg p-5 text-center">
-                        <img src="https://placehold.co/100x80/d1fae5/047857?text=Hours" class="mx-auto mb-3">
+                        <!-- 修正：替換為 Icon -->
+                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="fa-solid fa-clock fa-3x text-green-600"></i>
+                        </div>
                         <p class="text-gray-600">我總共貢獻</p>
                         <p class="text-4xl font-bold text-green-600 my-1"><span id="impact-total-hours">0</span> <span class="text-lg font-medium">小時</span></p>
                         <p class="text-gray-800 font-semibold">社區服務</p>
@@ -982,7 +1012,10 @@
                     </div>
                     <!-- 總共募集資源 -->
                     <div class="bg-white rounded-lg shadow-lg p-5 text-center">
-                        <img src="https://placehold.co/100x80/e0e7ff/4338ca?text=Items" class="mx-auto mb-3">
+                        <!-- 修正：替換為 Icon -->
+                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fa-solid fa-box-archive fa-3x text-gray-600"></i>
+                        </div>
                         <p class="text-gray-600">我總共募集</p>
                         <p class="text-4xl font-bold text-gray-600 my-1"><span id="impact-total-items">0</span> <span class="text-lg font-medium">件</span></p>
                         <p class="text-gray-800 font-semibold">資源 (書籍/冬衣)</p>
@@ -990,7 +1023,10 @@
                     </div>
                     <!-- 總共邀請 -->
                     <div class="bg-white rounded-lg shadow-lg p-5 text-center">
-                        <img src="https://placehold.co/100x80/f0f9ff/0284c7?text=Invite" class="mx-auto mb-3">
+                        <!-- 修正：替換為 Icon -->
+                        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-cyan-100 flex items-center justify-center">
+                            <i class="fa-solid fa-user-group fa-3x text-cyan-600"></i>
+                        </div>
                         <p class="text-gray-600">總共邀請</p>
                         <p class="text-4xl font-bold text-cyan-600 my-1">0 <span class="text-lg font-medium">位</span></p>
                         <p class="text-gray-800 font-semibold">夥伴</p>
@@ -1157,6 +1193,16 @@
         let acceptedTasks = []; // 新增：儲存已接受的任務
         let currentTaskToValidate = null; // 儲存當前要驗證的任務 ID
 
+        // --- 新增：地圖狀態 ---
+        let mapScale = 1;
+        let mapTranslateX = 0;
+        let mapTranslateY = 0;
+        let isPanning = false;
+        let lastPanX = 0;
+        let lastPanY = 0;
+        let mapViewport = null;
+        let mapContainer = null;
+
         // --- 任務資料庫 (模擬) ---
         const taskDatabase = {
             'task1': {
@@ -1214,6 +1260,10 @@
                     }
                     if (pageId === 'page-map') {
                         updateTaskPinsStatus(); // 每次到地圖頁都更新圖釘
+                        // --- 新增：初始化地圖 ---
+                        if (!mapViewport) { // 只初始化一次
+                            initializeMap();
+                        }
                     }
                     // 新增：更新影響力頁面
                     if (pageId === 'page-impact') {
@@ -1553,17 +1603,203 @@
 
         function redeemCoffeeVoucher(cost) {
             if (currentPoints >= cost) {
-                // 扣除點數
                 currentPoints -= cost;
-                // 更新顯示
-                updateGardenStats(); // 這會刷新花園頁面上的所有數據
-                updateRewardsStats(); // 同時更新獎勵頁面
-                // 顯示成功提示
+                updateGardenStats(); 
+                updateRewardsStats(); 
                 showSimpleAlert(`兌換成功！已花費 ${cost} 積分兌換在地商家咖啡券。`);
             } else {
-                // 顯示失敗提示
                 showSimpleAlert(`積分不足！您還需要 ${cost - currentPoints} 積分才能兌換。`);
             }
+        }
+        
+        // 新增：NPO 兌換
+        function redeemNPOBag(cost) {
+            if (currentPoints >= cost) {
+                currentPoints -= cost;
+                updateGardenStats(); 
+                updateRewardsStats(); 
+                showSimpleAlert(`兌換成功！已花費 ${cost} 積分兌換 NPO 紀念帆布袋。`);
+            } else {
+                showSimpleAlert(`積分不足！您還需要 ${cost - currentPoints} 積分才能兌換。`);
+            }
+        }
+        
+        // 新增：小作所兌換
+        function redeemSoap(cost) {
+            if (currentPoints >= cost) {
+                currentPoints -= cost;
+                updateGardenStats(); 
+                updateRewardsStats(); 
+                showSimpleAlert(`兌換成功！已花費 ${cost} 積分兌換小作所手工皂。`);
+            } else {
+                showSimpleAlert(`積分不足！您還需要 ${cost - currentPoints} 積分才能兌換。`);
+            }
+        }
+
+        // --- 新增：初始化地圖縮放平移 ---
+        function initializeMap() {
+            mapViewport = document.getElementById('map-viewport');
+            mapContainer = document.getElementById('map-container');
+
+            if (!mapViewport || !mapContainer) return;
+            
+            // 確保只綁定一次
+            if (mapViewport.dataset.initialized) return;
+            mapViewport.dataset.initialized = true;
+
+            // 1. 縮放 (Wheel)
+            mapViewport.addEventListener('wheel', (e) => {
+                e.preventDefault();
+
+                const rect = mapViewport.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left; // 滑鼠在 viewport 內的 X
+                const mouseY = e.clientY - rect.top;  // 滑鼠在 viewport 內的 Y
+
+                // 計算縮放前的滑鼠指向地圖上的哪個點
+                const mouseOnMapX = (mouseX - mapTranslateX) / mapScale;
+                const mouseOnMapY = (mouseY - mapTranslateY) / mapScale;
+
+                // 計算新 scale
+                const scaleDelta = -e.deltaY * 0.005;
+                let newScale = mapScale + scaleDelta;
+                newScale = Math.min(Math.max(0.5, newScale), 3); // 限制在 0.5x 到 3x
+
+                // 更新 scale
+                mapScale = newScale;
+
+                // 重新計算 translateX/Y，保持滑鼠指向的點在原地
+                mapTranslateX = mouseX - (mouseOnMapX * mapScale);
+                mapTranslateY = mouseY - (mouseOnMapY * mapScale);
+
+                // 修正：如果縮小，強制置中
+                if (mapScale < 1) {
+                    const viewportWidth = mapViewport.clientWidth;
+                    const viewportHeight = mapViewport.clientHeight;
+                    const mapWidth = mapContainer.clientWidth;
+                    const mapHeight = mapContainer.clientHeight;
+                    const scaledMapWidth = mapWidth * mapScale;
+                    const scaledMapHeight = mapHeight * mapScale;
+                    
+                    mapTranslateX = (viewportWidth - scaledMapWidth) / 2;
+                    mapTranslateY = (viewportHeight - scaledMapHeight) / 2;
+                }
+
+                updateMapTransform();
+            });
+
+            // 2. 平移 (Mouse)
+            mapViewport.addEventListener('mousedown', (e) => {
+                isPanning = true;
+                lastPanX = e.clientX;
+                lastPanY = e.clientY;
+                mapViewport.classList.add('grabbing'); // 增加 grabbing 游標
+            });
+
+            mapViewport.addEventListener('mousemove', (e) => {
+                if (!isPanning) return;
+                
+                // 修正：如果縮小，不允許平移
+                if (mapScale < 1) {
+                    isPanning = false;
+                    mapViewport.classList.remove('grabbing');
+                    return;
+                }
+                
+                const dx = e.clientX - lastPanX;
+                const dy = e.clientY - lastPanY;
+                
+                mapTranslateX += dx;
+                mapTranslateY += dy;
+                
+                lastPanX = e.clientX;
+                lastPanY = e.clientY;
+                
+                updateMapTransform();
+            });
+
+            const stopPanning = () => {
+                isPanning = false;
+                mapViewport.classList.remove('grabbing'); // 移除 grabbing 游標
+            };
+            mapViewport.addEventListener('mouseup', stopPanning);
+            mapViewport.addEventListener('mouseleave', stopPanning);
+
+            // 3. 平移 (Touch)
+            mapViewport.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isPanning = true;
+                    lastPanX = e.touches[0].clientX;
+                    lastPanY = e.touches[0].clientY;
+                }
+            });
+
+            mapViewport.addEventListener('touchmove', (e) => {
+                if (!isPanning || e.touches.length !== 1) return;
+                
+                // 修正：如果縮小，不允許平移
+                if (mapScale < 1) {
+                    isPanning = false;
+                    return;
+                }
+                
+                e.preventDefault(); // 防止頁面滾動
+                const dx = e.touches[0].clientX - lastPanX;
+                const dy = e.touches[0].clientY - lastPanY;
+                
+                mapTranslateX += dx;
+                mapTranslateY += dy;
+                
+                lastPanX = e.touches[0].clientX;
+                lastPanY = e.touches[0].clientY;
+                
+                updateMapTransform();
+            });
+
+            mapViewport.addEventListener('touchend', () => {
+                isPanning = false;
+            });
+        }
+
+        // --- 新增：更新地圖 Transform (含邊界修正) ---
+        function updateMapTransform() {
+            if (!mapContainer || !mapViewport) return;
+
+            const viewportWidth = mapViewport.clientWidth;
+            const viewportHeight = mapViewport.clientHeight;
+            const mapWidth = mapContainer.clientWidth;
+            const mapHeight = mapContainer.clientHeight;
+
+            const scaledMapWidth = mapWidth * mapScale;
+            const scaledMapHeight = mapHeight * mapScale;
+
+            let minX, maxX, minY, maxY;
+            const boundary = 50; // 允許拖出的邊界
+
+            if (mapScale < 1) {
+                // 縮小時，鎖定在地圖中央 (X軸)
+                minX = (viewportWidth - scaledMapWidth) / 2;
+                maxX = minX;
+            } else {
+                // 放大時，允許拖移 (X軸)
+                minX = viewportWidth - scaledMapWidth - boundary;
+                maxX = boundary;
+            }
+
+            if (mapScale < 1) {
+                 // 縮小時，鎖定在地圖中央 (Y軸)
+                minY = (viewportHeight - scaledMapHeight) / 2;
+                maxY = minY;
+            } else {
+                // 放大時，允許拖移 (Y軸)
+                minY = viewportHeight - scaledMapHeight - boundary;
+                maxY = boundary;
+            }
+
+            // 套用邊界
+            mapTranslateX = Math.min(Math.max(mapTranslateX, minX), maxX);
+            mapTranslateY = Math.min(Math.max(mapTranslateY, minY), maxY);
+
+            mapContainer.style.transform = `translate(${mapTranslateX}px, ${mapTranslateY}px) scale(${mapScale})`;
         }
 
         // 重設手動表單
